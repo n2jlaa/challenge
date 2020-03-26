@@ -15,10 +15,9 @@ router.get("/auth/signin", (request, response) => {
 router.post("/auth/signup", [
       check('name').isLength({ min: 3 }),
       check('phone').isLength({ min: 3 }),
-      check('email').isEmail(),
       check('password').isLength({ min: 6 })
   ],
-  (request, response) => {
+     (request, response) => {
       const errors = validationResult(request);
       if (!errors.isEmpty()) {
           request.flash("autherror", errors.errors)
