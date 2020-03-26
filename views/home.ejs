@@ -1,0 +1,8 @@
+<h3>You are logged in <%= currentUser.name %>!</h3>
+<div>
+  <% if(currentUser.isAdmin){ %>
+  <!-- <% //if(currentUser.userType == "regular"){ %>  -->
+  <% users.forEach(function(user){%>
+  <div><%= user.firstname %></div>
+  <% }) %> <% } %>
+</div>
