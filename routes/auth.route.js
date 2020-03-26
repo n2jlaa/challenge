@@ -4,41 +4,45 @@ const passport = require("../config/passportConfig");
 const isLoggedIn = require("../config/loginBlocker");
 const { check, validationResult } = require('express-validator');
 
+
 router.get("/auth/signup", (request, response) => {
   response.render("auth/signup");
+});
+
+router.post("/auth/signup", (request, response) => {
+  let user = new User(request.body);
+  user
+    .save()
+    .then(() => {
+      //()()()()
+      // response.redirect("/home");
+      //user login after registration
+      passport.authenticate("local", {
+        successRedirect: "/home",
+        successFlash: "Account created and You have logged In!"
+      })(request, response);
+    })
+    .catch(err => {
+      // console.log(err);
+      if (err.code == 11000) {
+        console.log("phone number Exists");
+        request.flash("error", "Phone number Exists");
+        return response.redirect("/auth/signup");
+      }
+      response.send("error!!!");
+    });
 });
 
 router.get("/auth/signin", (request, response) => {
   response.render("auth/signin");
 });
 
-router.post("/auth/signup", [
-      check('name').isLength({ min: 3 }),
-      check('phone').isLength({ min: 3 }),
-      check('password').isLength({ min: 6 })
-  ],
-     (request, response) => {
-      const errors = validationResult(request);
-      if (!errors.isEmpty()) {
-          request.flash("autherror", errors.errors)
-          return response.redirect("/auth/signup");
-      }
-      let user = new User(request.body);
-      user.save()
-          .then(() => {
-              // response.redirect("/home");
-              passport.authenticate("local", {
-                  successRedirect: "/home",
-                  successFlash: "Account created and Logged In!"
-              })(request, response);
-          })
-          .catch(err => {
-              console.log(err);
-              request.flash("error", "Email already exists!");
-              return response.redirect("/auth/signup");
-          });
-  }
-);
+router.get("/home", isLoggedIn, (request, response) => {
+  // request.user
+  User.find().then(users => {
+    response.render("home", { users });
+  });
+});
 
 //-- Login Route
 router.post(
