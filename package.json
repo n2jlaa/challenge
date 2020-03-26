@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.generalassemb.ly/sei-jeddah/full_day_practice_challenge.git"
+    "url": "https://git.generalassemb.ly/n2jlaa/full_day_practice_challenge.git"
   },
   "keywords": [],
   "author": "Schnecke Ebere",
@@ -17,7 +17,10 @@
     "bcrypt": "^4.0.1",
     "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "express-validator": "^6.4.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   }

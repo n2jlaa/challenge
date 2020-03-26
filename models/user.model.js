@@ -2,6 +2,18 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 var userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
   phone: {
     type: String,
     required: true
@@ -9,10 +21,20 @@ var userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+
+  userType: {
+    type: String,
+    enum: ["admin", "senior", "helper"],
+    default: "senior"
+  },
+  userList: {
+    type: String,
+    default: ""
   }
 });
 
-userSchema.pre("save", function(next) {
+userSchema.pre("save", function (next) {
   var user = this;
   // Only hash the password if it has been modified (or is new)
   if (!user.isModified("password")) return next();
@@ -25,7 +47,7 @@ userSchema.pre("save", function(next) {
   next();
 });
 
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.validPassword = function (password) {
   // Compare is a bcrypt method that will return a boolean,
   return bcrypt.compareSync(password, this.password);
 };
